@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 part 'api_service.g.dart';
 
 
-@RestApi(baseUrl: 'http://192.168.0.20:8000/')
+@RestApi(baseUrl: 'http://10.0.2.2:8000/')
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
   //Obtener productos
