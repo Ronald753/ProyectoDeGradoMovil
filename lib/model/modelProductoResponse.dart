@@ -1,0 +1,59 @@
+class Producto {
+  final int idProducto;
+  final int idCategoria;
+  final String nombreProducto;
+  final String descripcion;
+  final double? precio; // Cambia a double? para permitir null
+  final bool estado;
+  final DateTime fechaCreacion;
+  final List<Ingrediente> ingredientes;
+
+  Producto({
+    required this.idProducto,
+    required this.idCategoria,
+    required this.nombreProducto,
+    required this.descripcion,
+    this.precio, // Mantenerlo opcional
+    required this.estado,
+    required this.fechaCreacion,
+    required this.ingredientes,
+  });
+
+  factory Producto.fromJson(Map<String, dynamic> json) {
+    return Producto(
+      idProducto: json['id_producto'],
+      idCategoria: json['id_categoria'],
+      nombreProducto: json['nombre_producto'],
+      descripcion: json['descripcion'],
+      precio: (json['precio'] != null) ? json['precio'].toDouble() : null, // Asegúrate de manejar null
+      estado: json['estado'],
+      fechaCreacion: DateTime.parse(json['fecha_creacion']),
+      ingredientes: (json['ingredientes'] as List)
+          .map((i) => Ingrediente.fromJson(i))
+          .toList(),
+    );
+  }
+}
+
+class Ingrediente {
+  final int idIngrediente;
+  final String nombreIngrediente;
+  final String descripcionIngrediente;
+  final bool estado;
+
+  Ingrediente({
+    required this.idIngrediente,
+    required this.nombreIngrediente,
+    required this.descripcionIngrediente,
+    required this.estado,
+  });
+
+  factory Ingrediente.fromJson(Map<String, dynamic> json) {
+    return Ingrediente(
+      idIngrediente: json['id_ingrediente'],
+      nombreIngrediente: json['nombre_ingrediente'],
+      descripcionIngrediente: json['descripcion_ingrediente'],
+      estado: json['estado'],
+    );
+  }
+}
