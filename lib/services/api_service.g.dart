@@ -134,14 +134,14 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<UsuarioRequest> createUser(UsuarioRequest user) async {
+  Future<UsuarioResponse> createUser(UsuarioRequest user) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(user.toJson());
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<UsuarioRequest>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<UsuarioResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -157,7 +157,34 @@ class _ApiService implements ApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UsuarioRequest.fromJson(_result.data!);
+    final value = UsuarioResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<Usuario> getUsuarioPorId(int id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Usuario>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'clients/usuarios/${id}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = Usuario.fromJson(_result.data!);
     return value;
   }
 

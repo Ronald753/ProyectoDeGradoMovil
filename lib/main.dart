@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurante_potosi_app/view/menu.dart';
 import 'package:restaurante_potosi_app/model/Carrito.dart';
 import 'package:restaurante_potosi_app/view/login.dart';
+import 'package:restaurante_potosi_app/view/inicio_botones.dart';
 
 
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: PantallaMenu()
+      home: PantallaInicioBotones()
     );
   }
 }

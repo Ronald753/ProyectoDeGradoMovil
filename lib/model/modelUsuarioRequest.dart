@@ -8,7 +8,7 @@ class UsuarioRequest {
   final String apellido;
   final String telefono;
   final String email;
-  final String contrasenia;
+  final String password;
   final String rol;
 
   UsuarioRequest({
@@ -16,7 +16,7 @@ class UsuarioRequest {
     required this.apellido,
     required this.telefono,
     required this.email,
-    required this.contrasenia,
+    required this.password,
     required this.rol,
   });
 

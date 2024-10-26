@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:restaurante_potosi_app/services/api_service.dart'; // Asegúrate de importar tu ApiService
 import 'package:restaurante_potosi_app/model/modelLoginRequest.dart'; // Importa tu modelo de login
-import 'package:restaurante_potosi_app/view/menu.dart';
+import 'package:restaurante_potosi_app/view/inicio_botones.dart';
 import 'package:restaurante_potosi_app/view/registro.dart'; // Importa la pantalla de registro
 
 class LoginPage extends StatefulWidget {
@@ -18,36 +18,37 @@ class _LoginPageState extends State<LoginPage> {
 
   // Método para iniciar sesión
   Future<void> login(String email, String password) async {
-    try {
-      LoginRequest loginRequest = LoginRequest(email: email, password: password);
-      var response = await ApiService(Dio()).login(loginRequest.toJson());
+  try {
+    LoginRequest loginRequest = LoginRequest(email: email, password: password);
+    var response = await ApiService(Dio()).login(loginRequest.toJson());
 
-      if (response != null && response.message == 'Login exitoso') {
-        // Navegar a la pantalla de menú
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PantallaMenu(),
-          ),
-        );
-      } else {
-        _showErrorDialog('Error: ${response.message}');
-      }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        // Si la respuesta es un error, capturamos el cuerpo de la respuesta
-        String errorMessage = e.response?.data['message'] ?? 'Error en la conexión. Intenta de nuevo.';
-        _showErrorDialog(errorMessage);
-      } else {
-        // Si no hay respuesta, es un error de conexión
-        _showErrorDialog('Error en la conexión. Intenta de nuevo.');
-      }
-    } catch (e) {
-      // Para cualquier otro tipo de error
-      _showErrorDialog('Error inesperado: $e');
-      print('Error inesperado: $e');
+    if (response != null && response.message == 'Login exitoso') {
+      // Guardar el ID del usuario y el token en almacenamiento seguro
+      await storage.write(key: 'userId', value: response.user.id.toString());
+      await storage.write(key: 'token', value: response.token);
+
+      // Navegar a la pantalla de menú
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PantallaInicioBotones(),
+        ),
+      );
+    } else {
+      _showErrorDialog('Error: ${response.message}');
     }
+  } on DioException catch (e) {
+    if (e.response != null) {
+      String errorMessage = e.response?.data['message'] ?? 'Error en la conexión. Intenta de nuevo.';
+      _showErrorDialog(errorMessage);
+    } else {
+      _showErrorDialog('Error en la conexión. Intenta de nuevo.');
+    }
+  } catch (e) {
+    _showErrorDialog('Error inesperado: $e');
+    print('Error inesperado: $e');
   }
+}
 
   void _showErrorDialog(String message) {
     showDialog(

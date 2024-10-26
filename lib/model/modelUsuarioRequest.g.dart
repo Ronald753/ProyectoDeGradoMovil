@@ -12,7 +12,7 @@ UsuarioRequest _$UsuarioRequestFromJson(Map<String, dynamic> json) =>
       apellido: json['apellido'] as String,
       telefono: json['telefono'] as String,
       email: json['email'] as String,
-      contrasenia: json['contrasenia'] as String,
+      password: json['password'] as String,
       rol: json['rol'] as String,
     );
 
@@ -22,6 +22,6 @@ Map<String, dynamic> _$UsuarioRequestToJson(UsuarioRequest instance) =>
       'apellido': instance.apellido,
       'telefono': instance.telefono,
       'email': instance.email,
-      'contrasenia': instance.contrasenia,
+      'password': instance.password,
       'rol': instance.rol,
     };

@@ -5,6 +5,8 @@ import 'package:restaurante_potosi_app/model/modelLoginResponse.dart';
 import 'package:restaurante_potosi_app/model/modelUsuarioRequest.dart';
 import 'package:restaurante_potosi_app/model/modelObtenerValoraciones.dart';
 import 'package:restaurante_potosi_app/model/modelValoracionRequest.dart';
+import 'package:restaurante_potosi_app/model/modelUsuarioResponse.dart';
+import 'package:restaurante_potosi_app/model/modelCreateUsuarioResponse.dart';
 import 'package:retrofit/http.dart';
 import 'package:dio/dio.dart';
 part 'api_service.g.dart';
@@ -27,7 +29,10 @@ abstract class ApiService {
   Future<LoginResponse> login(@Body() Map<String, dynamic> loginRequest);
 
   @POST("clients/usuarios/add/")
-  Future<UsuarioRequest> createUser(@Body() UsuarioRequest user);
+  Future<UsuarioResponse> createUser(@Body() UsuarioRequest user);
+
+  @GET('clients/usuarios/{id}/')
+  Future<Usuario> getUsuarioPorId(@Path("id") int id);
 
   @GET('products/valoraciones/producto/{idProducto}/')
   Future<List<ValoracionProducto>> getValoracionesPorProducto(

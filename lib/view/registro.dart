@@ -29,37 +29,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _registerUser() async {
+  Future<void> _registerUser() async {
     if (_formKey.currentState!.validate()) {
       final user = UsuarioRequest(
         nombre: _nombreController.text,
         apellido: _apellidoController.text,
         telefono: _telefonoController.text,
         email: _emailController.text,
-        contrasenia: _contraseniaController.text,
-        rol: 'Cliente', // Asignar rol por defecto
+        password: _contraseniaController.text,
+        rol: 'cliente',
       );
 
-      final dio = Dio(); // Cliente HTTP
+      final dio = Dio();
       final apiService = ApiService(dio);
 
       try {
-        final createdUser = await apiService.createUser(user);
+        final response = await apiService.createUser(user);
+        // Aquí puedes acceder tanto al usuario como al token
+        final createdUser = response.usuario; // Usuario creado
+        final token = response.token; // Token de autenticación
 
-        if (createdUser != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Usuario creado: ${createdUser.nombre}")),
-          );
-          // Redirigir a la pantalla de login
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
-        }
+        // Manejo de la respuesta
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Usuario creado: ${createdUser.nombre}")),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error al crear usuario: $e")),
         );
+        print("Error al crear usuario: $e");
       }
     }
   }
@@ -69,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return 'Por favor ingresa tu contraseña';
     } else if (value.length < 8) {
       return 'La contraseña debe tener al menos 8 caracteres';
-    } else if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]').hasMatch(value)) {
+    } else if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$').hasMatch(value)) {
       return 'Debe incluir letras, números y un caracter especial';
     }
     return null;

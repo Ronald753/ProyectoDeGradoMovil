@@ -1,3 +1,7 @@
+import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tzData;
+
 class ValoracionProducto {
   final int idValoracionProducto;
   final int valoracion;
@@ -5,8 +9,9 @@ class ValoracionProducto {
   final DateTime fechaValoracion;
   final bool estado;
   final DateTime fechaCreacion;
-  final int idProducto;
-  final int idUsuario;
+  //final int idProducto;
+  final String nombreUsuario;  // Campo nuevo
+  final String apellidoUsuario; // Campo nuevo
 
   ValoracionProducto({
     required this.idValoracionProducto,
@@ -15,9 +20,13 @@ class ValoracionProducto {
     required this.fechaValoracion,
     required this.estado,
     required this.fechaCreacion,
-    required this.idProducto,
-    required this.idUsuario,
-  });
+    //required this.idProducto,
+    required this.nombreUsuario,  // Campo nuevo
+    required this.apellidoUsuario, // Campo nuevo
+  }) {
+    // Inicializa la base de datos de zonas horarias al crear una instancia
+    tzData.initializeTimeZones();
+  }
 
   // Factory para crear una instancia de ValoracionProducto desde un JSON
   factory ValoracionProducto.fromJson(Map<String, dynamic> json) {
@@ -28,8 +37,9 @@ class ValoracionProducto {
       fechaValoracion: DateTime.parse(json['fecha_valoracion']),
       estado: json['estado'],
       fechaCreacion: DateTime.parse(json['fecha_creacion']),
-      idProducto: json['id_producto'],
-      idUsuario: json['id_usuario'],
+      //idProducto: json['id_producto'],
+      nombreUsuario: json['nombre_usuario'],  // Campo nuevo
+      apellidoUsuario: json['apellido_usuario'], // Campo nuevo
     );
   }
 
@@ -42,9 +52,20 @@ class ValoracionProducto {
       'fecha_valoracion': fechaValoracion.toIso8601String(),
       'estado': estado,
       'fecha_creacion': fechaCreacion.toIso8601String(),
-      'id_producto': idProducto,
-      'id_usuario': idUsuario,
+      //'id_producto': idProducto,
+      'nombre_usuario': nombreUsuario,  // Campo nuevo
+      'apellido_usuario': apellidoUsuario, // Campo nuevo
     };
+  }
+
+  // Método para formatear la fecha y hora en horario de Bolivia
+  String getFormattedFechaValoracion() {
+    // Convierte la fecha a la zona horaria de Bolivia (America/La_Paz)
+    final boliviaTimeZone = tz.getLocation('America/La_Paz');
+    final boliviaDateTime = tz.TZDateTime.from(fechaValoracion.toUtc(), boliviaTimeZone);
+
+    // Formatea la fecha y hora
+    return DateFormat('dd/MM/yyyy HH:mm').format(boliviaDateTime);
   }
 }
 
