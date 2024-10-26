@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurante_potosi_app/view/menu.dart';
 import 'package:restaurante_potosi_app/model/Carrito.dart';
+import 'package:restaurante_potosi_app/view/login.dart';
+
 
 
 void main() => runApp(ChangeNotifierProvider(

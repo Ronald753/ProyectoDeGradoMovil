@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:restaurante_potosi_app/services/api_service.dart';
 import 'package:restaurante_potosi_app/model/modelProductoResponse.dart'; // Asegúrate de importar el modelo
+import 'package:restaurante_potosi_app/model/modelObtenerValoraciones.dart'; // Importa el modelo de ValoracionProducto
 import 'package:provider/provider.dart';
-import 'package:restaurante_potosi_app/model/Carrito.dart'; // Asegúrate de importar el modelo de carrito
+import 'package:restaurante_potosi_app/model/Carrito.dart'; // Importa el modelo de carrito
 import 'package:restaurante_potosi_app/view/carrito_pantalla.dart';
+import 'package:restaurante_potosi_app/model/modelValoracionRequest.dart'; // Importa el modelo de valoración
 
 class PantallaDescripcionProducto extends StatefulWidget {
-  final int idProducto; // Recibimos el id_producto
+  final int idProducto;
 
   const PantallaDescripcionProducto({Key? key, required this.idProducto}) : super(key: key);
 
@@ -16,16 +18,19 @@ class PantallaDescripcionProducto extends StatefulWidget {
 }
 
 class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
-  late Future<Producto> _productoFuture; // Variable para almacenar el futuro del producto
+  late Future<Producto> _productoFuture;
+  late Future<List<ValoracionProducto>> _valoracionesFuture;
+  late ApiService apiService;
 
   @override
   void initState() {
     super.initState();
     final dio = Dio(BaseOptions(contentType: "application/json"));
-    final apiService = ApiService(dio);
+    apiService = ApiService(dio);
 
-    // Llama a la API para obtener el producto
+    // Llama a la API para obtener el producto y las valoraciones
     _productoFuture = apiService.getProducto(widget.idProducto);
+    _valoracionesFuture = apiService.getValoracionesPorProducto(widget.idProducto);
   }
 
   @override
@@ -35,23 +40,25 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
         appBar: AppBar(
           title: Text("Descripción del Producto"),
           actions: <Widget>[
-            new Stack(
+            Stack(
               children: <Widget>[
                 IconButton(
-                    icon: Icon(Icons.shopping_cart),
-                    iconSize: 30,
-                    color: Colors.black,
-                    onPressed: () {
-                      accederCarrito(context, carrito);
-                    }),
-                new Positioned(
+                  icon: Icon(Icons.shopping_cart),
+                  iconSize: 30,
+                  color: Colors.black,
+                  onPressed: () {
+                    accederCarrito(context, carrito);
+                  },
+                ),
+                Positioned(
                   top: 6,
                   right: 6,
                   child: Container(
                     padding: EdgeInsets.all(2),
-                    decoration: new BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(4)),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                     constraints: BoxConstraints(minWidth: 14, minHeight: 14),
                     child: Text(
                       carrito.numeroProductos.toString(),
@@ -83,34 +90,25 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Nombre del producto
                   Text(
                     producto.nombreProducto,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  
-                  // Descripción del producto
                   Text(
                     producto.descripcion,
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 16),
-
-                  // Precio del producto
                   Text(
                     'Precio: Bs. ${producto.precio != null ? producto.precio!.toStringAsFixed(2) : 'No disponible'}',
                     style: TextStyle(fontSize: 18, color: Colors.green),
                   ),
                   SizedBox(height: 16),
-
-                  // Título de Ingredientes
                   Text(
                     'Ingredientes:',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  
-                  // Lista de ingredientes
                   Expanded(
                     child: ListView.builder(
                       itemCount: producto.ingredientes.length,
@@ -139,8 +137,6 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
                       },
                     ),
                   ),
-
-                  // Botón "Añadir al carrito"
                   SizedBox(height: 16),
                   Center(
                     child: ElevatedButton(
@@ -154,6 +150,52 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _mostrarDialogoValoracion(context);
+                      },
+                      child: Text("Valorar producto"),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        textStyle: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+
+                  // Apartado de comentarios
+                  Text(
+                    'Comentarios:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  FutureBuilder<List<ValoracionProducto>>(
+                    future: _valoracionesFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text("Error al cargar valoraciones"));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: Text("No hay valoraciones para este producto"));
+                      }
+
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final valoracion = snapshot.data![index];
+                            return ListTile(
+                              leading: Icon(Icons.star, color: Colors.amber),
+                              title: Text("Valoración: ${valoracion.valoracion}"),
+                              subtitle: Text(valoracion.comentario),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             );
@@ -164,38 +206,108 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
   }
 
   void agregarAlCarrito(BuildContext context, Producto producto) {
-    final carrito = Provider.of<Carrito>(context, listen: false); // Obtén el carrito del contexto
+    final carrito = Provider.of<Carrito>(context, listen: false);
 
-    // Agrega el producto al carrito
     carrito.agregarItem(
-      producto.idProducto.toString(), // Asumiendo que tu modelo Producto tiene un id
+      producto.idProducto.toString(),
       producto.nombreProducto,
       producto.precio ?? 0.0,
-      "1", // Cantidad, puedes modificar esto si deseas
-      1, // Este es el valor que estás usando en tu ejemplo original, puedes ajustarlo según sea necesario
+      "1",
+      1,
     );
 
-    // Mostrar un mensaje de éxito
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('${producto.nombreProducto} agregado al carrito')),
     );
   }
 
-  void accederCarrito(
-      BuildContext context, Carrito carrito) async {
-      print("Verificando sesión y accediendo al carrito...");
-      if (carrito.numeroProductos == 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Agrega un producto"),
+  void accederCarrito(BuildContext context, Carrito carrito) async {
+    if (carrito.numeroProductos == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Agrega un producto"),
+        ),
+      );
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext) => PantallaCarrito(),
+        ),
+      );
+    }
+  }
+
+  void _mostrarDialogoValoracion(BuildContext context) {
+    final _comentarioController = TextEditingController();
+    int _valoracionSeleccionada = 1; // Inicializar en 1 o el valor que prefieras
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Valorar Producto"),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setDialogState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return IconButton(
+                        icon: Icon(
+                          index < _valoracionSeleccionada ? Icons.star : Icons.star_border,
+                          color: Colors.amber,
+                        ),
+                        onPressed: () {
+                          setDialogState(() {
+                            _valoracionSeleccionada = index + 1; // Cambiar selección de estrellas
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                  TextField(
+                    controller: _comentarioController,
+                    decoration: InputDecoration(hintText: "Comentario"),
+                  ),
+                ],
+              );
+            },
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () async {
+                final valoracionRequest = ValoracionProductoRequest(
+                  idProducto: widget.idProducto,
+                  idUsuario: 3,
+                  valoracion: _valoracionSeleccionada,
+                  comentario: _comentarioController.text,
+                );
+
+                try {
+                  await apiService.enviarValoracion(valoracionRequest);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Valoración enviada con éxito")),
+                  );
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error al enviar la valoración: $e")),
+                  );
+                }
+              },
+              child: Text("Enviar"),
+            ),
+          ],
         );
-      } else {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext) => PantallaCarrito(),
-          ),
-        );
-      }
+      },
+    );
   }
 }
