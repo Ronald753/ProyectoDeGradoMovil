@@ -7,12 +7,15 @@ import 'package:restaurante_potosi_app/model/modelObtenerValoraciones.dart';
 import 'package:restaurante_potosi_app/model/modelValoracionRequest.dart';
 import 'package:restaurante_potosi_app/model/modelUsuarioResponse.dart';
 import 'package:restaurante_potosi_app/model/modelCreateUsuarioResponse.dart';
+import 'package:restaurante_potosi_app/model/modelObtenerSugerenciasResponse.dart';
+import 'package:restaurante_potosi_app/model/modelCrearSugerenciaRequest.dart';
 import 'package:retrofit/http.dart';
 import 'package:dio/dio.dart';
 part 'api_service.g.dart';
 
 
-@RestApi(baseUrl: 'http://192.168.0.20:8000/')
+@RestApi(baseUrl: 'https://proyectoapidjango.up.railway.app/')
+//@RestApi(baseUrl: 'http://192.168.0.20:8000/')
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
   //Obtener productos
@@ -42,4 +45,11 @@ abstract class ApiService {
   // Crear una nueva valoración
   @POST('products/valoraciones/valorar/')
   Future<void> enviarValoracion(@Body() ValoracionProductoRequest valoracion);
+
+  // Obtener sugerencias activas
+  @GET('clients/sugerencias/actives/') // Asegúrate de que esta URL sea correcta según tu configuración de API
+  Future<List<ObtenerSugerencias>> obtenerSugerenciasActivas();
+
+  @POST('clients/sugerencias/add/')
+  Future<void> crearSugerencia(@Body() CrearSugerencia sugerencia); // Método para crear sugerencia
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurante_potosi_app/view/menu.dart';
 import 'package:restaurante_potosi_app/view/login.dart';
 import 'package:restaurante_potosi_app/view/perfil.dart'; // Asegúrate de importar la pantalla de perfil
+import 'package:restaurante_potosi_app/view/sugerencias.dart'; // Importa la pantalla de sugerencias
 import 'package:restaurante_potosi_app/services/secure_storage_service.dart'; // Importa el servicio de almacenamiento seguro
 
 class PantallaInicioBotones extends StatefulWidget {
@@ -16,6 +17,7 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
   final List<Widget> _pages = [
     PantallaMenu(),
     PantallaPerfil(), // Agregada la pantalla de perfil aquí
+    PantallaSugerencias(), // Agregada la pantalla de sugerencias
   ];
 
   final SecureStorageService _secureStorageService = SecureStorageService();
@@ -58,6 +60,10 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: "Perfil",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.feedback), // Icono para la pantalla de sugerencias
+            label: "Sugerencias", // Etiqueta para el ítem de sugerencias
           ),
         ],
       ),

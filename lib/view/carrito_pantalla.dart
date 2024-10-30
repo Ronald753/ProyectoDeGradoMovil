@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurante_potosi_app/model/Carrito.dart';
-import 'package:restaurante_potosi_app/model/modelPedidoRequest.dart'; // Asegúrate de importar tu modelo de pedido
-import 'package:restaurante_potosi_app/services/api_service.dart'; // Asegúrate de importar tu servicio API
+import 'package:restaurante_potosi_app/model/modelPedidoRequest.dart';
+import 'package:restaurante_potosi_app/services/api_service.dart';
 import 'package:dio/dio.dart';
-import 'package:restaurante_potosi_app/view/menu.dart'; // Importa Dio
+import 'package:restaurante_potosi_app/view/inicio_botones.dart';
+import 'package:restaurante_potosi_app/services/secure_storage_service.dart';
 
 class PantallaCarrito extends StatefulWidget {
   @override
@@ -13,15 +14,24 @@ class PantallaCarrito extends StatefulWidget {
 
 class _PantallaCarritoState extends State<PantallaCarrito> {
   late ApiService apiService;
-  String tipoPedido = "Para comer aquí"; // Inicializamos el tipo de pedido
-  DateTime fechaPedido = DateTime.now(); // Fecha actual
+  String tipoPedido = "Para comer aquí";
+  DateTime fechaPedido = DateTime.now();
+  final SecureStorageService _secureStorageService = SecureStorageService();
+  int? userId; // Declara userId como una variable de estado opcional
 
   @override
   void initState() {
     super.initState();
-    // Inicializa el servicio API aquí
     final dio = Dio();
     apiService = ApiService(dio);
+    obtenerDatos();
+  }
+
+  Future<void> obtenerDatos() async {
+    String? userIdString = await _secureStorageService.obtenerUserId();
+    setState(() {
+      userId = int.tryParse(userIdString ?? '') ?? 0;
+    });
   }
 
   @override
@@ -46,7 +56,6 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    // Selección del tipo de pedido
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -155,7 +164,6 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
                 ),
               );
             } else {
-              // Construir el pedido
               var detalles = carrito.items.values.map((item) {
                 return DetallePedido(
                   id_producto: int.parse(item.id),
@@ -164,17 +172,17 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
                   subtotal: item.precio * item.cantidad,
                 );
               }).toList();
-
+              
+              // Asegúrate de que userId tenga un valor antes de crear el pedido
               var nuevoPedido = Pedido(
-                id_usuario: 1, // Cambia esto según tu lógica de usuario
-                fecha_pedido: fechaPedido.toIso8601String(), // Usar la fecha actual
-                tipo_pedido: tipoPedido, // Usar el tipo de pedido seleccionado
-                id_cupon: null, // O el ID del cupón si lo tienes
+                id_usuario: userId ?? 0, // Asigna userId recuperado
+                fecha_pedido: fechaPedido.toIso8601String(),
+                tipo_pedido: tipoPedido,
+                id_cupon: null,
                 total: carrito.montoTotal,
                 detalles: detalles,
               );
 
-              // Enviar el pedido a la API
               enviarPedido(nuevoPedido);
               carrito.removeCarrito();
             }
@@ -198,13 +206,12 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
           content: Text('Pedido enviado con éxito: ${response.toJson()}'),
         ),
       );
-      // Navegar a la pantalla del menú después de enviar el pedido
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PantallaMenu(),
+          builder: (context) => PantallaInicioBotones(),
         ),
-      ); // Cambia esto al nombre correcto de tu ruta
+      );
     } catch (e) {
       print('Error al enviar el pedido: $e');
       ScaffoldMessenger.of(context).showSnackBar(
