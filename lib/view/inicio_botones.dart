@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:restaurante_potosi_app/view/menu.dart';
 import 'package:restaurante_potosi_app/view/login.dart';
-import 'package:restaurante_potosi_app/view/perfil.dart'; // Asegúrate de importar la pantalla de perfil
-import 'package:restaurante_potosi_app/view/sugerencias.dart'; // Importa la pantalla de sugerencias
-import 'package:restaurante_potosi_app/services/secure_storage_service.dart'; // Importa el servicio de almacenamiento seguro
+import 'package:restaurante_potosi_app/view/perfil.dart';
+import 'package:restaurante_potosi_app/view/sugerencias.dart';
+import 'package:restaurante_potosi_app/view/cupones_pantalla.dart'; // Importa la pantalla de cupones
+import 'package:restaurante_potosi_app/services/secure_storage_service.dart';
 
 class PantallaInicioBotones extends StatefulWidget {
   const PantallaInicioBotones({super.key});
@@ -16,8 +17,9 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
   int _currentPage = 0;
   final List<Widget> _pages = [
     PantallaMenu(),
-    PantallaPerfil(), // Agregada la pantalla de perfil aquí
-    PantallaSugerencias(), // Agregada la pantalla de sugerencias
+    PantallaPerfil(),
+    PantallaSugerencias(),
+    CuponesPage(), // Asegúrate de pasar el ID del usuario correcto
   ];
 
   final SecureStorageService _secureStorageService = SecureStorageService();
@@ -27,7 +29,6 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
     String? token = await _secureStorageService.obtenerToken();
 
     if (userId == null || token == null) {
-      // Si no hay userId o token, navega a la pantalla de login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -44,14 +45,13 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
         onTap: (index) {
           setState(() {
             _currentPage = index;
-
-            if (_currentPage == 1) { // Cuando se selecciona el ícono de "Perfil"
-              _checkUserStatus(); // Llama a la función para verificar el estado del usuario
+            if (_currentPage == 1) {
+              _checkUserStatus();
             }
           });
         },
-        unselectedItemColor: Colors.black, // Color para íconos no seleccionados
-        selectedItemColor: Colors.red, // Color para ícono seleccionado
+        unselectedItemColor: Colors.black,
+        selectedItemColor: Colors.red,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),
@@ -62,8 +62,12 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
             label: "Perfil",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.feedback), // Icono para la pantalla de sugerencias
-            label: "Sugerencias", // Etiqueta para el ítem de sugerencias
+            icon: Icon(Icons.feedback),
+            label: "Sugerencias",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard), // Icono de cupones
+            label: "Cupones",
           ),
         ],
       ),

@@ -9,6 +9,7 @@ import 'package:restaurante_potosi_app/model/modelUsuarioResponse.dart';
 import 'package:restaurante_potosi_app/model/modelCreateUsuarioResponse.dart';
 import 'package:restaurante_potosi_app/model/modelObtenerSugerenciasResponse.dart';
 import 'package:restaurante_potosi_app/model/modelCrearSugerenciaRequest.dart';
+import 'package:restaurante_potosi_app/model/modelCuponResponse.dart'; // Importa el modelo de cupon
 import 'package:retrofit/http.dart';
 import 'package:dio/dio.dart';
 part 'api_service.g.dart';
@@ -52,4 +53,8 @@ abstract class ApiService {
 
   @POST('clients/sugerencias/add/')
   Future<void> crearSugerencia(@Body() CrearSugerencia sugerencia); // Método para crear sugerencia
+
+  // Obtener cupones asignados a un usuario específico
+  @GET('orders/cupones/usuario/{id_usuario}/')
+  Future<List<Cupon>> getCuponesPorUsuario(@Path("id_usuario") int idUsuario);
 }
