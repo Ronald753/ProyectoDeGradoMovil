@@ -275,6 +275,35 @@ class _ApiService implements ApiService {
   }
 
   @override
+  Future<List<Sugerencia>> obtenerSugerenciasPorUsuario(int idUsuario) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<Sugerencia>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'clients/sugerencias/usuario/${idUsuario}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => Sugerencia.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
   Future<void> crearSugerencia(CrearSugerencia sugerencia) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -297,6 +326,37 @@ class _ApiService implements ApiService {
           _dio.options.baseUrl,
           baseUrl,
         ))));
+  }
+
+  @override
+  Future<Sugerencia> editarSugerenciaPorId(
+    int sugerenciaId,
+    Map<String, dynamic> sugerenciaData,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(sugerenciaData);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<Sugerencia>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'clients/sugerencias/editar_por_id/${sugerenciaId}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = Sugerencia.fromJson(_result.data!);
+    return value;
   }
 
   @override
@@ -324,6 +384,35 @@ class _ApiService implements ApiService {
             ))));
     var value = _result.data!
         .map((dynamic i) => Cupon.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<Campaign>> getCampanasActivas() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Campaign>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'orders/campanas/listar/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => Campaign.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }
