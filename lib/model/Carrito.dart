@@ -24,7 +24,7 @@ class Carrito extends ChangeNotifier {
     String nombre,
     double precio,
     String unidad,
-    //String imagen,
+    String imagen,
     int cantidad,
   ) {
     if (_items.containsKey(producto_id)) {
@@ -35,7 +35,7 @@ class Carrito extends ChangeNotifier {
           nombre: old.nombre,
           precio: old.precio,
           unidad: old.unidad,
-          //imagen: old.imagen,
+          imagen: old.imagen,
           cantidad: old.cantidad + 1,
         ),
       );
@@ -47,7 +47,7 @@ class Carrito extends ChangeNotifier {
                 nombre: nombre,
                 precio: precio,
                 unidad: unidad,
-                //imagen: imagen,
+                imagen: imagen,
                 cantidad: 1,
               ));
     }
@@ -66,7 +66,7 @@ class Carrito extends ChangeNotifier {
           nombre: old.nombre,
           precio: old.precio,
           unidad: old.unidad,
-          //imagen: old.imagen,
+          imagen: old.imagen,
           cantidad: old.cantidad + 1,
         ),
       );
@@ -85,7 +85,7 @@ class Carrito extends ChangeNotifier {
         nombre: old.nombre,
         precio: old.precio,
         unidad: old.unidad,
-        //imagen: old.imagen,
+        imagen: old.imagen,
         cantidad: old.cantidad - 1,
       ),
     );

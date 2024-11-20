@@ -3,7 +3,7 @@ class Item {
   late String nombre;
   late double precio;
   late String unidad;
-  //late String imagen;
+  late String imagen;
   late int cantidad;
 
   Item({
@@ -11,7 +11,7 @@ class Item {
     required this.nombre,
     required this.precio,
     required this.unidad,
-    //required this.imagen,
+    required this.imagen,
     required this.cantidad,
   });
   
@@ -20,7 +20,7 @@ class Item {
     this.nombre = o["nombre"];
     this.precio = o["precio"];
     this.unidad = o["unidad"];
-    //this.imagen = o["imagen"];
+    this.imagen = o["imagen"];
     this.cantidad = o["cantidad"];
   }
 
@@ -30,7 +30,7 @@ class Item {
     map['nombre'] = nombre;
     map['precio'] = precio;
     map['unidad'] = unidad;
-    //map['imagen'] = imagen;
+    map['imagen'] = imagen;
     map['cantidad'] = cantidad;
     return map;
   }
@@ -41,7 +41,7 @@ class Item {
     data["nombre"] = this.nombre;
     data["precio"] = this.precio;
     data["unidad"] = this.unidad;
-    //data["imagen"] = this.imagen;
+    data["imagen"] = this.imagen;
     data["cantidad"] = this.cantidad;
     return data; 
   }

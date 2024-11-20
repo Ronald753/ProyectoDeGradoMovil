@@ -11,7 +11,7 @@ class MenuWithProducts {
 
   factory MenuWithProducts.fromJson(Map<String, dynamic> json) =>
       _$MenuWithProductsFromJson(json);
-  
+
   Map<String, dynamic> toJson() => _$MenuWithProductsToJson(this);
 }
 
@@ -19,13 +19,13 @@ class MenuWithProducts {
 class Menu {
   @JsonKey(name: 'id_menu') // Mapeo de nombre de campo
   final int idMenu;
-  
+
   @JsonKey(name: 'tipo_menu') // Mapeo de nombre de campo
   final String tipoMenu;
-  
+
   @JsonKey(name: 'fecha_creacion') // Mapeo de nombre de campo
   final DateTime fechaCreacion;
-  
+
   final bool estado;
 
   Menu({
@@ -36,6 +36,7 @@ class Menu {
   });
 
   factory Menu.fromJson(Map<String, dynamic> json) => _$MenuFromJson(json);
+
   Map<String, dynamic> toJson() => _$MenuToJson(this);
 }
 
@@ -43,23 +44,26 @@ class Menu {
 class Productos {
   @JsonKey(name: 'id_menu_producto') // Mapeo de nombre de campo
   final int idMenuProducto;
-  
+
   @JsonKey(name: 'fecha_creacion') // Mapeo de nombre de campo
   final DateTime fechaCreacion;
-  
+
   final bool estado;
-  
+
   @JsonKey(name: 'id_menu') // Mapeo de nombre de campo
   final int idMenu;
-  
+
   @JsonKey(name: 'id_producto') // Mapeo de nombre de campo
   final int idProducto;
-  
+
   @JsonKey(name: 'nombre_producto') // Mapeo de nombre de campo
   final String nombreProducto;
-  
+
   @JsonKey(name: 'precio_producto') // Mapeo de nombre de campo
   final double precioProducto;
+
+  @JsonKey(name: 'imagen_url') // Nuevo campo para la URL de la imagen
+  final String imagenUrl;
 
   Productos({
     required this.idMenuProducto,
@@ -69,6 +73,7 @@ class Productos {
     required this.idProducto,
     required this.nombreProducto,
     required this.precioProducto,
+    required this.imagenUrl,
   });
 
   factory Productos.fromJson(Map<String, dynamic> json) {
@@ -79,7 +84,8 @@ class Productos {
       idMenu: json['id_menu'] as int,
       idProducto: json['id_producto'] as int,
       nombreProducto: json['nombre_producto'] as String,
-      precioProducto: (json['precio_producto'] as num?)?.toDouble() ?? 0.0, // Maneja posibles nulos
+      precioProducto: (json['precio_producto'] as num?)?.toDouble() ?? 0.0,
+      imagenUrl: json['imagen_url'] as String, // Maneja el campo imagen_url
     );
   }
 

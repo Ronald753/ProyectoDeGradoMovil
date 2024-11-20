@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurante_potosi_app/view/menu.dart';
 import 'package:restaurante_potosi_app/view/login.dart';
+import 'package:restaurante_potosi_app/view/pedidos.dart';
 import 'package:restaurante_potosi_app/view/perfil.dart';
 import 'package:restaurante_potosi_app/view/sugerencias.dart';
 import 'package:restaurante_potosi_app/view/cupones_pantalla.dart';
@@ -20,7 +21,8 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
   // Lista de páginas
   final List<Widget> _pages = [
     PantallaMenu(),
-    CampanasActivasPage(), // Cambié CampanasActivasPage() por InicioPage()
+    PantallaPedidosUsuario(),
+    CampanasActivasPage(),
     PantallaPerfil(),
     PantallaSugerencias(),
     CuponesPage(),
@@ -63,6 +65,10 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),
             label: "Menú",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.send),
+            label: "Pedidos",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.campaign), // Icono para campañas

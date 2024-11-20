@@ -13,7 +13,7 @@ class _ApiService implements ApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://proyectoapidjango.up.railway.app/';
+    baseUrl ??= 'http://192.168.0.20:8000/';
   }
 
   final Dio _dio;
@@ -102,6 +102,35 @@ class _ApiService implements ApiService {
               baseUrl,
             ))));
     final value = Pedido.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<PedidosUsuario>> getPedidosPorUsuario(int idUsuario) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<PedidosUsuario>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'orders/pedidos/usuario/${idUsuario}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => PedidosUsuario.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 

@@ -85,10 +85,10 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
                         margin: EdgeInsets.all(10),
                         child: Row(
                           children: <Widget>[
-                            Image.asset(
-                              'assets/img/hamburguesa.jpg',
-                              width: 100,
-                            ),
+                            Image.network(
+                                    item.imagen,
+                                    width: 100,
+                                  ),
                             Expanded(
                               child: Container(
                                 padding: EdgeInsets.all(5),

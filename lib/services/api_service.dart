@@ -1,4 +1,5 @@
 import 'package:restaurante_potosi_app/model/modelMenuResponse.dart';
+import 'package:restaurante_potosi_app/model/modelPedidosUsuario.dart';
 import 'package:restaurante_potosi_app/model/modelProductoResponse.dart';
 import 'package:restaurante_potosi_app/model/modelPedidoRequest.dart';
 import 'package:restaurante_potosi_app/model/modelLoginResponse.dart';
@@ -17,8 +18,8 @@ import 'package:dio/dio.dart';
 part 'api_service.g.dart';
 
 
-@RestApi(baseUrl: 'https://proyectoapidjango.up.railway.app/')
-//@RestApi(baseUrl: 'http://192.168.0.20:8000/')
+//@RestApi(baseUrl: 'https://proyectoapidjango.up.railway.app/')
+@RestApi(baseUrl: 'http://192.168.0.20:8000/')
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
   //Obtener productos
@@ -30,6 +31,9 @@ abstract class ApiService {
 
   @POST('orders/pedidos/')
   Future<Pedido> crearPedido(@Body() Pedido pedido);
+  
+  @GET('orders/pedidos/usuario/{id_usuario}/')
+  Future<List<PedidosUsuario>> getPedidosPorUsuario(@Path("id_usuario") int idUsuario);
 
   @POST('clients/usuarios/login/')
   Future<LoginResponse> login(@Body() Map<String, dynamic> loginRequest);
@@ -64,7 +68,6 @@ abstract class ApiService {
     @Path("sugerencia_id") int sugerenciaId,
     @Body() Map<String, dynamic> sugerenciaData,
   );
-
 
   // Obtener cupones asignados a un usuario específico
   @GET('orders/cupones/usuario/{id_usuario}/')

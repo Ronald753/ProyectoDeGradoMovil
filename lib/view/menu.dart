@@ -39,7 +39,7 @@ class PantallaMenu extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "Menú", // Título de la pantalla
+            "Menú",
             style: TextStyle(
               color: Colors.white,
             ),
@@ -50,7 +50,6 @@ class PantallaMenu extends StatelessWidget {
             labelColor: Colors.black,
             indicatorColor: Colors.black,
             indicatorSize: TabBarIndicatorSize.label,
-            // Aquí se cambió el texto a tipo de menú
             tabs: menus.map((menu) => Tab(child: Text(menu.menu.tipoMenu))).toList(),
           ),
         ),
@@ -63,14 +62,13 @@ class PantallaMenu extends StatelessWidget {
                 itemCount: productos.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 3,
-                  mainAxisSpacing: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
                   final producto = productos[index];
                   return GestureDetector(
                     onTap: () {
-                      // Aquí puedes agregar la navegación a detalles si es necesario
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -82,29 +80,55 @@ class PantallaMenu extends StatelessWidget {
                       margin: EdgeInsets.all(10),
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        color: Colors.grey,
+                        color: Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 5,
+                            offset: Offset(2, 2),
+                          ),
+                        ],
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          // Imagen placeholder por ahora
-                          Container(
-                            height: 90,
-                            color: Colors.black12,
-                            width: double.infinity,
+                          // Imagen del producto
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: producto.imagenUrl != null && producto.imagenUrl.isNotEmpty
+                                ? Image.network(
+                                    producto.imagenUrl,
+                                    height: 100,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(
+                                    height: 100,
+                                    width: double.infinity,
+                                    color: Colors.grey,
+                                    child: Icon(
+                                      Icons.image_not_supported,
+                                      size: 50,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
+                          SizedBox(height: 8),
                           Text(
                             producto.nombreProducto ?? 'Nombre no disponible',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
                           ),
-                          // Aquí se agregó el precio de producto
+                          SizedBox(height: 4),
                           Text(
-                            'Bs. ${producto.precioProducto.toString()}',
+                            'Bs. ${producto.precioProducto.toStringAsFixed(2)}',
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.black87,
+                              fontSize: 14,
                             ),
                           ),
                         ],
