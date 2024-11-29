@@ -1,25 +1,41 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'modelUsuarioRequest.g.dart';
-
-@JsonSerializable()
 class UsuarioRequest {
-  final String nombre;
-  final String apellido;
-  final String telefono;
-  final String email;
-  final String password;
-  final String rol;
+  final String? nombre;
+  final String? apellido;
+  final String? telefono;
+  final String? email;
+  final String? password;
+  final String? rol;
 
   UsuarioRequest({
-    required this.nombre,
-    required this.apellido,
-    required this.telefono,
-    required this.email,
-    required this.password,
-    required this.rol,
+    this.nombre,
+    this.apellido,
+    this.telefono,
+    this.email,
+    this.password,
+    this.rol,
   });
 
-  factory UsuarioRequest.fromJson(Map<String, dynamic> json) => _$UsuarioRequestFromJson(json);
-  Map<String, dynamic> toJson() => _$UsuarioRequestToJson(this);
+  // Método para convertir un JSON en un objeto UsuarioRequest
+  factory UsuarioRequest.fromJson(Map<String, dynamic> json) {
+    return UsuarioRequest(
+      nombre: json['nombre'] as String?,
+      apellido: json['apellido'] as String?,
+      telefono: json['telefono'] as String?,
+      email: json['email'] as String?,
+      password: json['password'] as String?,
+      rol: json['rol'] as String?,
+    );
+  }
+
+  // Método para convertir un objeto UsuarioRequest a JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'nombre': nombre ?? '',
+      'apellido': apellido ?? '',
+      'telefono': telefono ?? '',
+      'email': email ?? '',
+      'password': password ?? '',
+      'rol': rol ?? '',
+    };
+  }
 }
