@@ -13,15 +13,21 @@ import 'package:restaurante_potosi_app/model/modelCrearSugerenciaRequest.dart';
 import 'package:restaurante_potosi_app/model/modelCuponResponse.dart'; // Importa el modelo de cupon
 import 'package:restaurante_potosi_app/model/modelCampanaResponse.dart'; 
 import 'package:restaurante_potosi_app/model/modelSugerenciasUsuarioResponse.dart'; 
+import 'package:restaurante_potosi_app/model/modelEditarPerfilResponse.dart'; 
+import 'package:restaurante_potosi_app/model/modelCuponUseResponse.dart'; 
 import 'package:retrofit/http.dart';
 import 'package:dio/dio.dart';
 part 'api_service.g.dart';
 
 
-//@RestApi(baseUrl: 'https://proyectoapidjango.up.railway.app/')
-@RestApi(baseUrl: 'http://192.168.0.20:8000/')
+@RestApi(baseUrl: 'https://proyectoapidjango.up.railway.app/')
+//@RestApi(baseUrl: 'http://192.168.0.20:8000/')
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
+
+  @GET('orders/cupones/buscar_cupon/{cupon_codigo}/')
+  Future<CuponResponse> buscarCupon(@Path("cupon_codigo") String cuponCodigo);
+
   //Obtener productos
   @GET('products/menu/menus/')
   Future<List<MenuWithProducts>> getMenus();
@@ -43,6 +49,12 @@ abstract class ApiService {
 
   @GET('clients/usuarios/{id}/')
   Future<Usuario> getUsuarioPorId(@Path("id") int id);
+
+  @PUT('clients/usuarios/update/{id_usuario}/')
+  Future<EditarUsuarioResponse> actualizarUsuario(
+    @Path("id_usuario") int idUsuario,
+    @Body() Map<String, dynamic> usuarioData,
+  );
 
   @GET('products/valoraciones/producto/{idProducto}/')
   Future<List<ValoracionProducto>> getValoracionesPorProducto(

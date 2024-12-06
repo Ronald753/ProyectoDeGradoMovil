@@ -48,8 +48,12 @@ class _PantallaPedidosUsuarioState extends State<PantallaPedidosUsuario> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mis Pedidos"),
-        backgroundColor: Colors.red,
+        title: Text("Mis Pedidos",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 75, 96, 112),
       ),
       body: _loading
           ? Center(child: CircularProgressIndicator())

@@ -71,7 +71,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Iniciar Sesión')),
+      appBar: AppBar(title: Text('Iniciar Sesión',
+          style: TextStyle(
+                  color: Colors.white,
+                ),
+          ),
+          backgroundColor: const Color.fromARGB(255, 75, 96, 112),
+        ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -89,16 +95,27 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Iniciar Sesión'),
+              child: Text('Iniciar Sesión',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
                 String email = _emailController.text;
                 String password = _passwordController.text;
                 login(email, password);
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueGrey, // Color de fondo
+              ),
             ),
             SizedBox(height: 20),
             TextButton(
-              child: Text('Crear Usuario'),
+              child: Text('Crear Usuario',
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                ),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,

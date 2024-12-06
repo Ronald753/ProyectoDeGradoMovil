@@ -59,8 +59,9 @@ class _PantallaInicioBotonesState extends State<PantallaInicioBotones> {
             _currentPage = index;
           });
         },
+        backgroundColor: Colors.blue,
         unselectedItemColor: Colors.black,
-        selectedItemColor: Colors.red,
+        selectedItemColor: const Color.fromARGB(255, 75, 96, 112),
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),

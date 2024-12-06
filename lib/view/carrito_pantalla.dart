@@ -45,7 +45,7 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: const Color.fromARGB(255, 75, 96, 112),
           elevation: 0,
         ),
         body: SingleChildScrollView(
@@ -80,6 +80,7 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
                         ],
                       ),
                     ),
+                    // Visualización de los productos en el carrito
                     for (var item in carrito.items.values)
                       Card(
                         margin: EdgeInsets.all(10),
@@ -164,30 +165,11 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
                 ),
               );
             } else {
-              var detalles = carrito.items.values.map((item) {
-                return DetallePedido(
-                  id_producto: int.parse(item.id),
-                  cantidad: item.cantidad,
-                  precio_unitario: item.precio,
-                  subtotal: item.precio * item.cantidad,
-                );
-              }).toList();
-              
-              // Asegúrate de que userId tenga un valor antes de crear el pedido
-              var nuevoPedido = Pedido(
-                id_usuario: userId ?? 0, // Asigna userId recuperado
-                fecha_pedido: fechaPedido.toIso8601String(),
-                tipo_pedido: tipoPedido,
-                id_cupon: null,
-                total: carrito.montoTotal,
-                detalles: detalles,
-              );
-
-              enviarPedido(nuevoPedido);
-              carrito.removeCarrito();
+              // Preguntar si tiene un cupón
+              _preguntarSiTieneCupon(carrito);
             }
           },
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.blueGrey,
           child: Icon(
             Icons.send,
             color: Colors.white,
@@ -195,6 +177,137 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
         ),
       );
     });
+  }
+
+  Future<void> _preguntarSiTieneCupon(Carrito carrito) async {
+    // Mostrar un cuadro de diálogo para preguntar si tiene un cupón
+    bool tieneCupon = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("¿Tienes un cupón?"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);  // Usuario tiene cupón
+            },
+            child: Text("Sí"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);  // Usuario no tiene cupón
+            },
+            child: Text("No"),
+          ),
+        ],
+      ),
+    );
+
+    if (tieneCupon) {
+      // Si tiene cupón, preguntar el código del cupón
+      String cuponCodigo = await _mostrarInputCupon();
+      
+      if (cuponCodigo.isNotEmpty) {
+        // Llamar a la API para buscar el cupon
+        await _buscarCupon(cuponCodigo, carrito);
+      } else {
+        // Si no se ingresa un cupón, enviar el pedido sin id_cupon
+        _enviarPedidoSinCupon(carrito);
+      }
+    } else {
+      // Si no tiene cupón, enviar el pedido sin id_cupon
+      _enviarPedidoSinCupon(carrito);
+    }
+  }
+
+  Future<String> _mostrarInputCupon() async {
+    String cuponCodigo = '';
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Ingresa el código de tu cupón"),
+        content: TextField(
+          onChanged: (value) {
+            cuponCodigo = value;
+          },
+          decoration: InputDecoration(hintText: "Código de cupón"),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Aceptar"),
+          ),
+        ],
+      ),
+    );
+    return cuponCodigo;
+  }
+
+  Future<void> _buscarCupon(String cuponCodigo, Carrito carrito) async {
+    try {
+      final cuponResponse = await apiService.buscarCupon(cuponCodigo);
+      
+      if (cuponResponse.error!.isEmpty) {
+        // Si el cupon es válido, agregar el id_cupon al pedido
+        _enviarPedidoConCupon(cuponResponse.idCupon ?? 0, carrito);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(cuponResponse.error ?? "")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error al verificar el cupón: $e")),
+      );
+      _enviarPedidoSinCupon(carrito);
+    }
+  }
+
+  void _enviarPedidoConCupon(int idCupon, Carrito carrito) {
+    var detalles = carrito.items.values.map((item) {
+      return DetallePedido(
+        id_producto: int.parse(item.id),
+        cantidad: item.cantidad,
+        precio_unitario: item.precio,
+        subtotal: item.precio * item.cantidad,
+      );
+    }).toList();
+
+    var nuevoPedido = Pedido(
+      id_usuario: userId ?? 0,
+      fecha_pedido: fechaPedido.toIso8601String(),
+      tipo_pedido: tipoPedido,
+      id_cupon: idCupon,
+      total: carrito.montoTotal,
+      detalles: detalles,
+    );
+
+    enviarPedido(nuevoPedido);
+    carrito.removeCarrito();
+  }
+
+  void _enviarPedidoSinCupon(Carrito carrito) {
+    var detalles = carrito.items.values.map((item) {
+      return DetallePedido(
+        id_producto: int.parse(item.id),
+        cantidad: item.cantidad,
+        precio_unitario: item.precio,
+        subtotal: item.precio * item.cantidad,
+      );
+    }).toList();
+
+    var nuevoPedido = Pedido(
+      id_usuario: userId ?? 0,
+      fecha_pedido: fechaPedido.toIso8601String(),
+      tipo_pedido: tipoPedido,
+      id_cupon: null, // No hay cupón
+      total: carrito.montoTotal,
+      detalles: detalles,
+    );
+
+    enviarPedido(nuevoPedido);
+    carrito.removeCarrito();
   }
 
   Future<void> enviarPedido(Pedido pedido) async {

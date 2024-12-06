@@ -115,11 +115,17 @@ class _PantallaValoracionesProductoState extends State<PantallaValoracionesProdu
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Valoraciones del Producto"),
-        backgroundColor: Colors.red,
+        title: Text("Valoraciones del Producto",
+            style: TextStyle(
+              fontSize: 21,
+              color: Colors.white,
+            ),
+          ),
+        backgroundColor: const Color.fromARGB(255, 75, 96, 112),
         actions: [
           IconButton(
             icon: Icon(Icons.rate_review),
+            color: Colors.white,
             onPressed: () {
               _mostrarDialogoValoracion(context);
             },

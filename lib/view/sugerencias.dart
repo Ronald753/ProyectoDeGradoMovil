@@ -112,14 +112,19 @@ class _PantallaSugerenciasState extends State<PantallaSugerencias> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sugerencias'),
+        title: Text('Sugerencias',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 75, 96, 112),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
-            onPressed: _showCreateSugerenciaDialog,
+            icon: Icon(Icons.add, color: Colors.white),
+            onPressed: _showCreateSugerenciaDialog,       
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, color: Colors.white),
             onPressed: _navigateToMisSugerencias,
           ),
         ],
@@ -226,7 +231,12 @@ class MisSugerenciasPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mis Sugerencias'),
+        title: Text('Mis Sugerencias',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+        ),
+        backgroundColor: Colors.blueGrey,
       ),
       body: FutureBuilder<List<Sugerencia>>(
         future: fetchMisSugerencias(),
@@ -263,7 +273,7 @@ class MisSugerenciasPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             IconButton(
-                              icon: Icon(Icons.edit, color: Colors.blue),
+                              icon: Icon(Icons.edit, color: Colors.blueGrey),
                               onPressed: () => _showEditSugerenciaDialog(
                                 context,
                                 sugerencia.idSugerencia,

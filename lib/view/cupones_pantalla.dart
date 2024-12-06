@@ -74,7 +74,12 @@ class _CuponesPageState extends State<CuponesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mis Cupones"),
+        title: Text("Mis Cupones",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor:  Color.fromARGB(255, 75, 96, 112),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())

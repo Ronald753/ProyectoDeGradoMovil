@@ -82,7 +82,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro de Usuario'),
+        title: Text('Registro de Usuario', 
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        backgroundColor: const Color.fromARGB(255, 75, 96, 112),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -158,7 +163,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _registerUser,
-                  child: Text('Registrar Usuario'),
+                  child: Text('Registrar Usuario',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey, // Color de fondo
+                  ),
                 ),
               ],
             ),

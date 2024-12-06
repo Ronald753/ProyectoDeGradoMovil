@@ -51,14 +51,19 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
     return Consumer<Carrito>(builder: (context, carrito, child) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("Descripción del Producto"),
+          title: Text("Descripción del Producto",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor:  Color.fromARGB(255, 75, 96, 112),
           actions: <Widget>[
             Stack(
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.shopping_cart),
                   iconSize: 30,
-                  color: Colors.black,
+                  color: Colors.white,
                   onPressed: () {
                     accederCarrito(context, carrito);
                   },
@@ -69,7 +74,7 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
                   child: Container(
                     padding: EdgeInsets.all(2),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.grey,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     constraints: BoxConstraints(minWidth: 14, minHeight: 14),
@@ -175,10 +180,15 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
                       onPressed: () {
                         agregarAlCarrito(context, producto);
                       },
-                      child: Text("Añadir al carrito"),
+                      child: Text("Añadir al carrito",
+                      style: TextStyle(
+                        color: Colors.white,
+                        ),
+                      ),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                        textStyle: TextStyle(fontSize: 18),
+                        backgroundColor: Colors.blueGrey, // Color de fondo
+                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12), // Padding
+                        textStyle: TextStyle(fontSize: 18), // Estilo del texto
                       ),
                     ),
                   ),
@@ -192,8 +202,13 @@ class _PantallaDescripcionProducto extends State<PantallaDescripcionProducto> {
                           ),
                         );
                       },
-                      child: Text("Ver valoraciones"),
+                      child: Text("Ver valoraciones",
+                      style: TextStyle(
+                        color: Colors.white,
+                        ),
+                      ),
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueGrey, 
                         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         textStyle: TextStyle(fontSize: 18),
                       ),

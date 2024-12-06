@@ -44,12 +44,15 @@ class PantallaMenu extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: const Color.fromARGB(255, 75, 96, 112),
           bottom: TabBar(
             isScrollable: true,
-            labelColor: Colors.black,
-            indicatorColor: Colors.black,
+            labelColor: Colors.white, // Color del texto seleccionado
+            unselectedLabelColor: Colors.grey, // Color del texto no seleccionado
+            indicatorColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,
+            labelStyle: TextStyle(fontSize: 20), // Tamaño de la fuente del texto seleccionado
+            unselectedLabelStyle: TextStyle(fontSize: 16), // Tamaño de la fuente del texto no seleccionado
             tabs: menus.map((menu) => Tab(child: Text(menu.menu.tipoMenu))).toList(),
           ),
         ),

@@ -41,7 +41,12 @@ class _CampanasActivasPageState extends State<CampanasActivasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Campañas Activas'),
+        title: Text('Campañas Activas',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 75, 96, 112),
       ),
       body: isLoading
           ? Center(

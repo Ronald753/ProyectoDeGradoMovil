@@ -13,12 +13,39 @@ class _ApiService implements ApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.0.20:8000/';
+    baseUrl ??= 'https://proyectoapidjango.up.railway.app/';
   }
 
   final Dio _dio;
 
   String? baseUrl;
+
+  @override
+  Future<CuponResponse> buscarCupon(String cuponCodigo) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CuponResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'orders/cupones/buscar_cupon/${cuponCodigo}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CuponResponse.fromJson(_result.data!);
+    return value;
+  }
 
   @override
   Future<List<MenuWithProducts>> getMenus() async {
@@ -214,6 +241,37 @@ class _ApiService implements ApiService {
               baseUrl,
             ))));
     final value = Usuario.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<EditarUsuarioResponse> actualizarUsuario(
+    int idUsuario,
+    Map<String, dynamic> usuarioData,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(usuarioData);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<EditarUsuarioResponse>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'clients/usuarios/update/${idUsuario}/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = EditarUsuarioResponse.fromJson(_result.data!);
     return value;
   }
 
