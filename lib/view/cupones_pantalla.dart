@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:restaurante_potosi_app/services/api_service.dart';
 import 'package:restaurante_potosi_app/services/secure_storage_service.dart';
 import 'package:restaurante_potosi_app/model/modelCuponResponse.dart';
+import 'package:intl/intl.dart';
+
 
 class CuponesPage extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class _CuponesPageState extends State<CuponesPage> {
   late SecureStorageService _secureStorageService;
   List<Cupon> cupones = [];
   bool isLoading = true;
+  final formato = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
@@ -98,7 +101,9 @@ class _CuponesPageState extends State<CuponesPage> {
                           children: [
                             Text("Descuento: ${cupon.porcentajeDescuento}%"),
                             Text("Usos disponibles: ${cupon.usosDisponibles} de ${cupon.usosMaximos}"),
-                            Text("Expira: ${cupon.fechaExpiracion?.toLocal().toString().split(' ')[0] ?? 'Sin fecha'}"),
+                            Text(
+                              'Expira: ${cupon.fechaExpiracion != null ? formato.format(cupon.fechaExpiracion!) : 'Sin fecha'}',
+                            ),
                           ],
                         ),
                         trailing: cupon.estado

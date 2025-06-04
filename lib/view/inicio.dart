@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:restaurante_potosi_app/services/api_service.dart'; // Asegúrate de importar tu ApiService
 import 'package:restaurante_potosi_app/model/modelCampanaResponse.dart'; 
+import 'package:intl/intl.dart';
 
 class CampanasActivasPage extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _CampanasActivasPageState extends State<CampanasActivasPage> {
   late ApiService apiService;
   List<Campaign> campanas = [];
   bool isLoading = true;
+  final formato = DateFormat('dd-MM-yyyy HH:mm');
 
   @override
   void initState() {
@@ -19,6 +21,14 @@ class _CampanasActivasPageState extends State<CampanasActivasPage> {
     apiService = ApiService(Dio());
     _fetchCampanasActivas();
   }
+
+  // Función para parsear y formatear la fecha
+  String formatearFecha(String fechaStr) {
+    final DateTime fecha = DateTime.parse(fechaStr).toLocal(); // Ajuste a la hora local
+    final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
+    return formatter.format(fecha);
+  }
+
 
   Future<void> _fetchCampanasActivas() async {
     try {
@@ -91,7 +101,7 @@ class _CampanasActivasPageState extends State<CampanasActivasPage> {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              'Válido desde: ${campaign.fechaInicio} hasta ${campaign.fechaFin}',
+                              'Válido desde: ${formato.format(campaign.fechaInicio)} hasta ${formato.format(campaign.fechaFin)}',
                               style: TextStyle(fontSize: 12),
                             ),
                             SizedBox(height: 10),

@@ -9,7 +9,7 @@ class Campaign {
   final List<String> productosRelacionados;
 
   Campaign({
-    this.id, // Ahora es opcional
+    this.id,
     required this.titulo,
     required this.mensaje,
     required this.tipoPromocion,

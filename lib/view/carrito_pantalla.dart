@@ -316,7 +316,7 @@ class _PantallaCarritoState extends State<PantallaCarrito> {
       final response = await apiService.crearPedido(pedido);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Pedido enviado con éxito: ${response.toJson()}'),
+          content: Text('Pedido enviado con éxito'),
         ),
       );
       Navigator.push(

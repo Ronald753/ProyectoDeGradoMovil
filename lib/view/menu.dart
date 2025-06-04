@@ -68,7 +68,7 @@ class PantallaMenu extends StatelessWidget {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   mainAxisExtent: 230,
-                ),
+                ), 
                 itemBuilder: (context, index) {
                   final producto = productos[index];
                   return GestureDetector(

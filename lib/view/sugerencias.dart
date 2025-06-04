@@ -16,6 +16,7 @@ class _PantallaSugerenciasState extends State<PantallaSugerencias> {
   List<ObtenerSugerencias> sugerencias = [];
   final ApiService apiService = ApiService(Dio());
   late SecureStorageService _secureStorageService;
+  final formato = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
@@ -146,7 +147,7 @@ class _PantallaSugerenciasState extends State<PantallaSugerencias> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Fecha: ${sugerencia.fechaSugerencia.toLocal().toString().split(' ')[0]}',
+                    'Fecha: ${formato.format(sugerencia.fechaSugerencia)}',
                     style: TextStyle(color: Colors.grey),
                   ),
                   SizedBox(height: 8),
@@ -229,6 +230,7 @@ class MisSugerenciasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formato = DateFormat('dd-MM-yyyy');
     return Scaffold(
       appBar: AppBar(
         title: Text('Mis Sugerencias',
@@ -266,7 +268,7 @@ class MisSugerenciasPage extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Fecha: ${sugerencia.fechaSugerencia.toLocal().toString().split(' ')[0]}',
+                          'Fecha: ${formato.format(sugerencia.fechaSugerencia)}',
                           style: TextStyle(color: Colors.grey),
                         ),
                         Row(

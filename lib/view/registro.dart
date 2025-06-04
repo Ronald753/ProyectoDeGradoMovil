@@ -60,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error al crear usuario: $e")),
+          SnackBar(content: Text("Error al crear usuario")),
         );
         print("Error al crear usuario: $e");
       }
