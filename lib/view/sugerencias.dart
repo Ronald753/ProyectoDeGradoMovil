@@ -146,7 +146,7 @@ class _PantallaSugerenciasState extends State<PantallaSugerencias> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Fecha: ${sugerencia.fechaSugerencia}',
+                    'Fecha: ${sugerencia.fechaSugerencia.toLocal().toString().split(' ')[0]}',
                     style: TextStyle(color: Colors.grey),
                   ),
                   SizedBox(height: 8),
@@ -266,7 +266,7 @@ class MisSugerenciasPage extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Fecha: ${sugerencia.fechaSugerencia}',
+                          'Fecha: ${sugerencia.fechaSugerencia.toLocal().toString().split(' ')[0]}',
                           style: TextStyle(color: Colors.grey),
                         ),
                         Row(

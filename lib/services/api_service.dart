@@ -21,7 +21,7 @@ part 'api_service.g.dart';
 
 
 @RestApi(baseUrl: 'https://proyectoapidjango.up.railway.app/')
-//@RestApi(baseUrl: 'http://192.168.0.20:8000/')
+//@RestApi(baseUrl: 'http://192.168.0.18:8000/')
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
 

@@ -48,10 +48,11 @@ class _PantallaPedidosUsuarioState extends State<PantallaPedidosUsuario> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mis Pedidos",
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        title: Text(
+          "Mis Pedidos",
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
         backgroundColor: const Color.fromARGB(255, 75, 96, 112),
       ),
@@ -64,6 +65,7 @@ class _PantallaPedidosUsuarioState extends State<PantallaPedidosUsuario> {
                   itemCount: _pedidos.length,
                   itemBuilder: (context, index) {
                     final pedido = _pedidos[index];
+                    final numeroPedido = _pedidos.length - index;
                     return Card(
                       margin: EdgeInsets.symmetric(vertical: 8),
                       elevation: 4,
@@ -72,7 +74,7 @@ class _PantallaPedidosUsuarioState extends State<PantallaPedidosUsuario> {
                       ),
                       child: ExpansionTile(
                         title: Text(
-                          "Pedido #${pedido.idPedido}",
+                          "Pedido #$numeroPedido", // Número basado en el índice
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         subtitle: Column(

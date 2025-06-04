@@ -67,6 +67,7 @@ class PantallaMenu extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
+                  mainAxisExtent: 230,
                 ),
                 itemBuilder: (context, index) {
                   final producto = productos[index];
@@ -95,8 +96,8 @@ class PantallaMenu extends StatelessWidget {
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min, // importante para que el Column no se expanda demasiado
                         children: <Widget>[
-                          // Imagen del producto
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: producto.imagenUrl != null && producto.imagenUrl.isNotEmpty
@@ -120,6 +121,8 @@ class PantallaMenu extends StatelessWidget {
                           SizedBox(height: 8),
                           Text(
                             producto.nombreProducto ?? 'Nombre no disponible',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
